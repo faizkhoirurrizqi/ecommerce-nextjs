@@ -1,23 +1,10 @@
 "use client";
 
-import {
-  Check,
-  ChevronsUpDown,
-  PlusCircle,
-  Store as StoreIcon,
-} from "lucide-react";
-import { useState } from "react";
-import { Store } from "@prisma/client";
-import { useParams, useRouter } from "next/navigation";
+import * as React from "react";
+import { Check, ChevronsUpDown, PlusCircle, Store } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { useStoreModal } from "@/hooks/use-store-modal";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -27,13 +14,20 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { useStoreModal } from "@/hooks/use-store-modal";
+import { useParams, useRouter } from "next/navigation";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
 >;
 
 interface StoreSwitcherProps extends PopoverTriggerProps {
-  items: Store[];
+  items: Record<string, any>[];
 }
 
 export default function StoreSwitcher({
@@ -53,7 +47,7 @@ export default function StoreSwitcher({
     (item) => item.value === params.storeId
   );
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const onStoreSelect = (store: { value: string; label: string }) => {
     setOpen(false);
@@ -71,7 +65,7 @@ export default function StoreSwitcher({
           aria-label="Select a store"
           className={cn("w-[200px] justify-between", className)}
         >
-          <StoreIcon className="mr-2 h-4 w-4" />
+          <Store className="mr-2 h-4 w-4" />
           {currentStore?.label}
           <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -88,7 +82,7 @@ export default function StoreSwitcher({
                   onSelect={() => onStoreSelect(store)}
                   className="text-sm"
                 >
-                  <StoreIcon className="mr-2 h-4 w-4" />
+                  <Store className="mr-2 h-4 w-4" />
                   {store.label}
                   <Check
                     className={cn(
@@ -111,7 +105,7 @@ export default function StoreSwitcher({
                   storeModal.onOpen();
                 }}
               >
-                <PlusCircle className="mr-2 h-2 w-5" />
+                <PlusCircle className="mr-2 h-5 w-5" />
                 Create Store
               </CommandItem>
             </CommandGroup>
