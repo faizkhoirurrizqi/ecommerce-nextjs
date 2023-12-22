@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs";
-
 import prismadb from "@/lib/prismadb";
 
 export default async function SetupLayout({
@@ -14,14 +13,19 @@ export default async function SetupLayout({
     redirect("/sign-in");
   }
 
-  const store = await prismadb.store.findFirst({
-    where: {
-      userId,
-    },
-  });
+  try {
+    const store = await prismadb.store.findFirst({
+      where: {
+        userId,
+      },
+    });
 
-  if (store) {
-    redirect(`/${store.id}`);
+    if (store) {
+      redirect(`/${store.id}`);
+    }
+  } catch (error) {
+    // Log the error for further investigation
+    console.error("Prisma Client Error:", error);
   }
 
   return <>{children}</>;
